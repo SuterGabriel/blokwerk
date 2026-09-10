@@ -9,7 +9,9 @@ den vollständigen Weg einmal zeigen: vom Inhaltsmodell im CMS über die
 Auslieferung per API bis zur statisch gebauten Seite, die sich bei einer
 Veröffentlichung gezielt selbst erneuert.
 
-**Live:** https://blokwerk.vercel.app
+**Live:** noch nicht deployt. Die URL wird hier eingetragen, sobald der
+Storyblok-Space steht — bis dahin wäre sie ein totes Versprechen. Welche
+Schritte dafür offen sind, steht in [docs/ANFORDERUNGEN.md](./docs/ANFORDERUNGEN.md).
 
 ## Welche Konzepte darin vorkommen
 
@@ -78,6 +80,12 @@ https://<domain>/api/revalidate?secret=<STORYBLOK_WEBHOOK_SECRET>
 
 Ohne diesen Webhook erscheint eine Veröffentlichung erst nach Ablauf des
 `revalidate`-Intervalls von einer Stunde.
+
+## Wofür das Projekt als Nachweis dient
+
+Blokwerk tritt als Arbeitsprobe gegen eine konkrete Ausschreibung an. Welche
+Anforderung durch welche Datei belegt ist — und welche nicht —, steht in
+[docs/ANFORDERUNGEN.md](./docs/ANFORDERUNGEN.md).
 
 ## Inhaltsmodell
 
