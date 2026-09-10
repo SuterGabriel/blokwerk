@@ -93,8 +93,14 @@ vollständige Entkopplung dort teurer gewesen wäre als der Nutzen.
 | `priority` für das Bild above the fold | `artikel/[slug]/page.tsx:77` |
 | Statisch ausgeliefert statt pro Aufruf gerendert | `generateStaticParams` plus `dynamicParams = false` |
 | Lint auf React-Regeln | `eslint.config.mjs`, Lauf in der CI |
+| Vorlage, gegen die gebaut wurde | [docs/entwurf/](./entwurf/README.md) — Wireframes und Mockups, je in Desktop- und Mobilbreite |
 
-Offen: Es liegen keine Messwerte vor. „Performant" ist bis zu einem
+Offen, erstens: Die mobile Navigation fehlt. Das Wireframe zeigt bei 390 Pixeln
+ein Menüsymbol, `src/components/ui/Header.tsx` rendert die vier Links auf jeder
+Breite nebeneinander. Bei vier kurzen Wörtern fällt das nicht auf, aber es ist
+keine responsive Navigation, sondern eine, die zufällig noch passt.
+
+Offen, zweitens: Es liegen keine Messwerte vor. „Performant" ist bis zu einem
 Lighthouse-Lauf gegen das Deployment eine Behauptung. Siehe „Offene Punkte".
 
 ## Wie dieses Dokument geprüft wird

@@ -59,6 +59,13 @@ vor jedem Commit und in der CI. Was die Gates prüfen und warum, steht in
 
 Warum das so gebaut ist, steht in [DECISIONS.md](./DECISIONS.md).
 
+## Entwurf
+
+Gebaut ist die Oberfläche gegen Wireframes und Mockups, die in
+[docs/entwurf/](./docs/entwurf/README.md) liegen — samt der Zuordnung, welche
+Zone im Wireframe welche Datei geworden ist, und welche drei Punkte aus der
+Vorlage noch offen sind.
+
 ## Lokal starten
 
 ```bash

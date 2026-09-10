@@ -10,3 +10,7 @@
 
 # Der Hook wird von Git ausgefuehrt, gleiche Begruendung.
 .githooks/* text eol=lf
+
+# Die Entwurfsvorlagen sind binaer. Git erkennt das selbst, aber eine falsch
+# gesetzte Autokonvertierung soll hier gar nicht erst zum Thema werden.
+*.pdf  binary
