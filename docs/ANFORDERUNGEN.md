@@ -46,7 +46,9 @@ Belegt ist damit die Beherrschung der Konzepte, nicht eine Projekthistorie.
 
 ### 2. „Erfahrung mit Storyblok oder vergleichbaren Headless-CMS-Plattformen."
 
-**Status: für Storyblok belegt. Für „vergleichbare Plattformen" nicht belegt.**
+**Status: belegt.** Die Anforderung sagt „oder", nicht „und" — Storyblok ist
+belegt, damit ist sie erfüllt. Offen bleibt nicht die Anforderung, sondern eine
+Zeile der Selbsteinschätzung; das steht unten.
 
 | Konzept | Beleg |
 |---|---|
@@ -58,11 +60,12 @@ Belegt ist damit die Beherrschung der Konzepte, nicht eine Projekthistorie.
 | Trennung Draft / Published über zwei Token | `src/lib/storyblok/server.ts:12–21` |
 | Image Service | `src/components/ui/SbImage.tsx:24` |
 
-Zu „vergleichbaren Plattformen": Ich habe mit Sanity und Contentful nicht
-gearbeitet. Die Adapterschicht ist so gebaut, dass ein Wechsel eine neue
-Adapterdatei wäre und keine neue Oberfläche (`DECISIONS.md`, Punkt 4) — das ist
-ein Argument für Übertragbarkeit, aber kein Erfahrungsnachweis. Wenn danach
-gefragt wird, gehört das so gesagt.
+Zu „vergleichbaren Plattformen": Die Ausschreibung verlangt weiter unten eine
+Liste weiterer Headless-CMS-Plattformen samt Selbsteinschätzung. Diese Liste ist
+kurz — ich habe mit Sanity und Contentful nicht gearbeitet. Die Adapterschicht
+ist so gebaut, dass ein Wechsel eine neue Adapterdatei wäre und keine neue
+Oberfläche (`DECISIONS.md`, Punkt 4) — das ist ein Argument für Übertragbarkeit,
+aber kein Erfahrungsnachweis. Wenn danach gefragt wird, gehört das so gesagt.
 
 ### 3. „Verständnis für Headless-CMS-Architekturen, Content-Modelle und API-basierte Content-Ausspielung."
 
