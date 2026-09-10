@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Die Prüfung auf dieser Maschine, vor dem Commit.
+#
+# Drei Gates, keine Abhängigkeiten, zusammen unter einer Sekunde. Der Hook ist
+# mit --no-verify umgehbar, und das ist Absicht: Ein Hook, der eine halbe
+# Minute braucht, wird umgangen, und ein Hook, der routinemässig umgangen wird,
+# erzwingt nichts. Dieselben Gates laufen in der CI noch einmal, dort sind sie
+# keine Option.
+#
+# Alle drei laufen über den ganzen Baum statt nur über die vorgemerkten
+# Dateien. Der Grund ist bei allen dreien derselbe: Sie brechen typischerweise
+# durch eine Änderung an einer *anderen* Datei als der, die man gerade
+# bearbeitet. Ein Verweis stirbt durch eine Umbenennung, ein Zeilen-Beleg
+# verrutscht durch eine Einfügung weiter oben.
+#
+# Einrichten: bash scripts/hooks-installieren.sh
+
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+fehler=0
+
+lauf() {
+  local name="$1"; shift
+  local ausgabe
+  if ausgabe=$("$@" 2>&1); then
+    printf '  ok    %s\n' "$name"
+  else
+    printf '  ROT   %s\n' "$name"
+    printf '%s\n' "$ausgabe" | sed 's/^/        /'
+    fehler=$((fehler + 1))
+  fi
+}
+
+echo "Blokwerk, Prüfung vor dem Commit"
+echo "================================"
+
+lauf "Entkopplung" bash scripts/entkopplung-check.sh
+lauf "Belege"      bash scripts/beleg-check.sh
+lauf "Verweise"    node scripts/link-check.mjs
+
+if [ "$fehler" -gt 0 ]; then
+  cat <<'HINWEIS'
+
+Der Commit ist gestoppt. Diese Gates prüfen Zusagen, die dieses Repo über
+sich selbst macht — sie sollen kaputtgehen, wenn die Zusage nicht mehr stimmt.
+
+Entweder die Stelle richtigstellen — oder die Behauptung streichen.
+
+Wenn der Commit trotzdem sein muss: git commit --no-verify. Die CI prüft
+dieselben Gates noch einmal, dort ist es keine Option.
+HINWEIS
+  exit 1
+fi
+
+echo "Alle Gates grün."

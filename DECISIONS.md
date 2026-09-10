@@ -63,6 +63,12 @@ DOM-Element und Inhaltsobjekt verknüpfen kann. Deshalb gibt es die dünne Schic
 weitergibt. Die Alternative wäre, auf den Visual Editor zu verzichten — also auf
 das Merkmal, wegen dem man Storyblok wählt.
 
+Die Naht ist dabei nicht der einzige Ort. `article` ist ein Content-Type und
+kein Blok, hat also keine Blok-Komponente — die Route
+`app/artikel/[slug]/page.tsx` setzt `storyblokEditable` selbst. Das ist die
+einzige weitere Stelle, und sie steht namentlich in
+`scripts/entkopplung-check.sh`. Wer eine hinzufügt, tut das sichtbar.
+
 **Rich Text** ist ein verschachtelter Baum im Format des jeweiligen CMS.
 Storyblok, Sanitys Portable Text und Contentful sind untereinander nicht
 kompatibel. Eine eigene Zwischendarstellung wäre ein zweiter Renderer und stünde
@@ -84,7 +90,40 @@ Bei einer Demo dieser Grösse würden Tests Zeit kosten und wenig zeigen. Die
 Stelle, die tatsächlich Logik enthält, ist der Adapter; wäre das Projekt grösser,
 würde ich dort anfangen.
 
+Was es stattdessen gibt, steht in Punkt 9 — und ersetzt keine Tests.
+
 ## 8. Keine Datenbank
 
 Es gibt keinen Zustand, der nicht aus dem CMS kommt. Formulare, Suche und
 Authentifizierung sind bewusst weggelassen.
+
+## 9. Gates auf die Dokumentation statt Tests auf den Code
+
+Punkt 7 begründet, warum es keine Unit-Tests gibt. Damit blieb aber etwas
+anderes ungeprüft, das bei einer Arbeitsprobe mehr wiegt als eine grüne
+Testsuite: die Aussagen, die dieses Repo über sich selbst macht.
+
+Drei davon standen als Prosa da. Die README beschrieb eine Trennung zwischen
+Darstellung und CMS und nannte einen Grep-Befehl, den niemand ausführt.
+`docs/ANFORDERUNGEN.md` ordnet jeder Anforderung einer Ausschreibung eine
+Codestelle mit Zeilennummer zu. Und die Dokumente verweisen aufeinander.
+
+Alle drei brechen lautlos. Ein Import in `components/ui/` fällt niemandem auf.
+Ein Zeilen-Beleg verrutscht, sobald jemand oben etwas einfügt — die Tabelle
+sieht weiter gepflegt aus, weil niemand eine Belegspalte gegen den Quelltext
+liest. Ein Verweis stirbt bei der ersten Umbenennung.
+
+Die Alternative wäre gewesen, es bei der Prosa zu belassen und im Gespräch
+darauf zu verweisen. Der Einwand dagegen ist derselbe wie bei Punkt 3: Was
+nur behauptet wird, altert unbemerkt. Die drei Skripte unter `scripts/`
+kosten zusammen unter einer Sekunde und machen aus jeder Behauptung eine
+Zusage, die kaputtgehen kann.
+
+Der Preis ist eine von Hand gepflegte Ankerliste im Beleg-Check. Sie liesse
+sich nicht ableiten: Welche Zeile eine Anforderung belegt, ist eine fachliche
+Aussage. Wer eine Zeilennummer ändert, ändert die Liste mit — und entscheidet
+dabei bewusst, worauf der Beleg zeigt.
+
+Der Gedanke stammt aus dem Schwesterprojekt Aptum, wo ArchUnit die
+Domänenschicht absichert. Der Zuschnitt hier ist kleiner, absichtlich: Ein
+Prüfapparat, der grösser wäre als die geprüfte Sache, zeigt kein Augenmass.

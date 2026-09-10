@@ -92,9 +92,31 @@ vollständige Entkopplung dort teurer gewesen wäre als der Nutzen.
 | Serverseitige Skalierung und WebP | `src/components/ui/SbImage.tsx:25` |
 | `priority` für das Bild above the fold | `artikel/[slug]/page.tsx:77` |
 | Statisch ausgeliefert statt pro Aufruf gerendert | `generateStaticParams` plus `dynamicParams = false` |
+| Lint auf React-Regeln | `eslint.config.mjs`, Lauf in der CI |
 
 Offen: Es liegen keine Messwerte vor. „Performant" ist bis zu einem
 Lighthouse-Lauf gegen das Deployment eine Behauptung. Siehe „Offene Punkte".
+
+## Wie dieses Dokument geprüft wird
+
+Eine Belegspalte ist nur so viel wert, wie sie stimmt. Drei Gates halten sie
+aktuell, ausgeführt vor jedem Commit und in der CI:
+
+| Gate | Prüft |
+|---|---|
+| `scripts/beleg-check.sh` | Jeder Pfad oben existiert. Jede Zeilennummer zeigt noch auf das, was hier behauptet wird. |
+| `scripts/entkopplung-check.sh` | Die Architekturzusagen aus README und DECISIONS.md halten. |
+| `scripts/link-check.mjs` | Kein Verweis zwischen den Dokumenten zeigt ins Leere. |
+
+Der Beleg-Check prüft nicht nur, ob eine Datei existiert, sondern ob die
+belegte **Zeile** noch den behaupteten Inhalt trägt. Das ist der lautlose Fall:
+Jemand fügt oben drei Zeilen ein, der Verweis zeigt auf etwas anderes, und die
+Tabelle sieht weiter gepflegt aus. Details in [PIPELINE.md](./PIPELINE.md),
+Begründung in [DECISIONS.md](../DECISIONS.md), Punkt 9.
+
+Was die Gates ausdrücklich **nicht** sind: Tests. Sie prüfen Aussagen über den
+Code, nicht sein Verhalten. Warum es keine Unit-Tests gibt, steht in
+DECISIONS.md, Punkt 7.
 
 ## Nicht abgedeckt
 
@@ -128,6 +150,9 @@ Diese Schritte brauchen Zugänge, die nur Gabriel hat:
    eintragen. Erst dann ist Anforderung 4 vollständig belegt.
 6. **Fallback prüfen** wie in `SCHEMA.md` beschrieben — ein nicht registrierter
    Blok muss den Platzhalter zeigen, nicht die Seite kippen.
+7. **Token als GitHub-Secret hinterlegen.** Erst dann kann die CI auch
+   `next build` prüfen; das Gerüst dafür steht auskommentiert in
+   `.github/workflows/ci.yml`.
 
 ## Selbsteinschätzung
 

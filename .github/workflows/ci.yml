@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Die Pipeline prüft, sie veröffentlicht nichts. Mehr Rechte braucht sie nicht.
+permissions:
+  contents: read
+
+# Ein zweiter Push auf denselben Zweig bricht den ersten Lauf ab, statt beide
+# zu bezahlen.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Zwei Jobs, bewusst getrennt: Die Gates brauchen keine Abhängigkeiten und sind
+# in Sekunden durch. Wer eine Zeilennummer in der Anforderungsmappe verschoben
+# hat, sieht das, ohne auf npm ci zu warten.
+
+jobs:
+  gates:
+    name: Zusagen des Repos
+    runs-on: ubuntu-latest
+    # Drei Behauptungen, die dieses Repo über sich selbst macht — die
+    # Architekturtrennung, die Belege in der Anforderungsmappe, die Verweise
+    # zwischen den Dokumenten. Ohne diese Gates stehen sie nur in Prosa da.
+    # Erklärt in docs/PIPELINE.md.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      # Die drei bleiben getrennte Schritte, damit im roten Lauf ohne Logsuche
+      # sichtbar ist, welches der Gates hing.
+      - name: Entkopplung prüfen
+        run: bash scripts/entkopplung-check.sh
+      - name: Belege prüfen
+        run: bash scripts/beleg-check.sh
+      - name: Verweise prüfen
+        run: node scripts/link-check.mjs
+
+  typen:
+    name: Typen und Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Abhängigkeiten
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      # ESLint bleibt auf der 9er-Linie, Begründung in eslint.config.mjs.
+      - name: Lint
+        run: npm run lint
+
+  # --- Sobald die Token als Secrets hinterlegt sind ------------------------
+  # Bewusst als auskommentiertes Gerüst, nicht als Job, der den Build
+  # überspringt und trotzdem grün meldet. Ein Job, der nichts prüft und Erfolg
+  # meldet, ist schlimmer als kein Job.
+  #
+  # `next build` ruft beim Sammeln der Seitendaten die Storyblok-API auf. Ohne
+  # Token bricht er ab — nicht wegen eines Fehlers im Code, sondern weil
+  # src/lib/storyblok/server.ts:18 genau das meldet. Der Job ist deshalb erst
+  # sinnvoll, wenn unter Settings -> Secrets ein Lesetoken liegt.
+  #
+  # build:
+  #   name: Build gegen echte Inhalte
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '24'
+  #         cache: npm
+  #     - run: npm ci
+  #     - run: npm run build
+  #       env:
+  #         STORYBLOK_PUBLIC_TOKEN: ${{ secrets.STORYBLOK_PUBLIC_TOKEN }}
+  #
+  # Ebenfalls offen, sobald ein Deployment existiert: ein Lighthouse-Lauf, der
+  # die Zusage "performant" aus docs/ANFORDERUNGEN.md mit Zahlen belegt statt
+  # sie zu behaupten.

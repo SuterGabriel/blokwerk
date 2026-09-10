@@ -45,11 +45,17 @@ Storyblok JSON
 ```
 
 Komponenten unter `components/ui/` importieren nichts aus `@storyblok/react`.
-Prüfbar mit:
+Das ist keine Absichtserklärung, sondern ein Gate:
 
 ```bash
-grep -rl "@storyblok" src/components/ui/   # gibt nichts aus
+bash scripts/entkopplung-check.sh
 ```
+
+Es prüft drei Zusagen — dass die Darstellungsschicht das CMS nicht kennt, dass
+`storyblokEditable` in der Naht bleibt, und dass die eigenen Typen nur
+`import type` benutzen. Zusammen mit dem Beleg- und dem Verweis-Check läuft es
+vor jedem Commit und in der CI. Was die Gates prüfen und warum, steht in
+[docs/PIPELINE.md](./docs/PIPELINE.md).
 
 Warum das so gebaut ist, steht in [DECISIONS.md](./DECISIONS.md).
 
@@ -57,6 +63,7 @@ Warum das so gebaut ist, steht in [DECISIONS.md](./DECISIONS.md).
 
 ```bash
 npm install
+bash scripts/hooks-installieren.sh   # Gates vor dem Commit
 cp .env.example .env.local   # Token aus dem Storyblok-Space eintragen
 npm run dev
 ```
