@@ -42,7 +42,7 @@ weil man für sie das CMS kaputtmachen muss. Sie sind umgesetzt:
 
 ## Was im Entwurf steht und noch nicht im Code
 
-Die Vorlagen sind nicht vollständig umgesetzt. Der Stand:
+Der Stand:
 
 - **Mobile Navigation.** Wireframe 3 zeigt im Header ein Menüsymbol,
   [Header.tsx](../../src/components/ui/Header.tsx) rendert die vier Links auf
@@ -51,9 +51,11 @@ Die Vorlagen sind nicht vollständig umgesetzt. Der Stand:
   lesen“. Die Komponente kann beides
   ([HeroView.tsx](../../src/components/ui/HeroView.tsx)), das Schema hat das
   Feld — es hängt nur an Inhalten im Space.
-- **Artikelübersicht.** Header und Footer verweisen auf `/journal`, die Seite
-  entsteht erst mit einer Story dieses Namens im CMS. Bis dahin läuft der Link
-  in ein 404.
 
-Diese drei stehen im Mockup selbst unter „Nächste Schritte“ und sind bewusst
-offen geblieben, nicht übersehen.
+Der dritte Punkt aus dem Mockup, die **Artikelübersicht**, ist inzwischen
+gebaut: [journal/page.tsx](../../src/app/journal/page.tsx). Sie ist eine eigene
+Route und keine Story im CMS — warum, steht in
+[DECISIONS.md](../../DECISIONS.md), Punkt 10.
+
+Die beiden verbliebenen stehen im Mockup unter „Nächste Schritte“ und sind
+bewusst offen geblieben, nicht übersehen.
