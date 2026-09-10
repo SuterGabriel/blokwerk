@@ -87,7 +87,9 @@ vollständige Entkopplung dort teurer gewesen wäre als der Nutzen.
 
 ### 4. „Erfahrung in der Umsetzung responsiver, performanter Webanwendungen."
 
-**Status: teilweise belegt. Messwerte fehlen.**
+**Status: belegt, mit einer benannten Grenze.** Das ausgelieferte Gewicht ist
+gemessen und wird in der CI gehalten. Nicht gemessen ist Geschwindigkeit — dafür
+braucht es ein Deployment.
 
 | Konzept | Beleg |
 |---|---|
@@ -98,14 +100,34 @@ vollständige Entkopplung dort teurer gewesen wäre als der Nutzen.
 | Statisch ausgeliefert statt pro Aufruf gerendert | `generateStaticParams` plus `dynamicParams = false` |
 | Lint auf React-Regeln | `eslint.config.mjs`, Lauf in der CI |
 | Vorlage, gegen die gebaut wurde | [docs/entwurf/](./entwurf/README.md) — Wireframes und Mockups, je in Desktop- und Mobilbreite |
+| Gemessenes Seitengewicht | `scripts/budget-check.mjs`, in der CI nach jedem Build |
+| Build ohne Zugangsdaten, damit die Messung überhaupt läuft | `src/lib/storyblok/fixtures/index.ts:17`, Begründung `DECISIONS.md` Punkt 11 |
 
 Offen, erstens: Die mobile Navigation fehlt. Das Wireframe zeigt bei 390 Pixeln
 ein Menüsymbol, `src/components/ui/Header.tsx` rendert die vier Links auf jeder
 Breite nebeneinander. Bei vier kurzen Wörtern fällt das nicht auf, aber es ist
 keine responsive Navigation, sondern eine, die zufällig noch passt.
 
-Offen, zweitens: Es liegen keine Messwerte vor. „Performant" ist bis zu einem
-Lighthouse-Lauf gegen das Deployment eine Behauptung. Siehe „Offene Punkte".
+Die Messung, Stand 10.09.2026, gebaut gegen die Fixtures und ohne Bilder:
+
+| | |
+|---|---|
+| Schwerste Seite | 296,7 KB (Startseite) |
+| Leichteste gemessene Seite | 179,8 KB (404) |
+| Davon Framework | rund 190 KB gzip |
+| Davon zwei Schriften | 97 KB |
+| Davon eigenes CSS | 4,5 KB |
+| Grenze im Gate | 305 KB pro Seite |
+
+Der unbequeme Teil davon steht in `DECISIONS.md` Punkt 12: Die Startseite
+verspricht im Fliesstext 180 Kilobyte, und diese Zahl ist mit React und Next.js
+nicht erreichbar — der eigene Anteil an der Seite liegt bei etwa vier Prozent.
+Das Gate hält deshalb die gemessene Wirklichkeit, nicht den Anspruch. Wer im
+Gespräch danach fragt, bekommt die Tabelle und keine Ausrede.
+
+Offen bleibt Geschwindigkeit. Gewicht ist nicht Latenz. „Performant" im Sinne
+von Largest Contentful Paint ist bis zu einem Lighthouse-Lauf gegen ein
+Deployment weiterhin unbelegt. Siehe „Offene Punkte".
 
 ## Wie dieses Dokument geprüft wird
 
@@ -117,6 +139,7 @@ aktuell, ausgeführt vor jedem Commit und in der CI:
 | `scripts/beleg-check.sh` | Jeder Pfad oben existiert. Jede Zeilennummer zeigt noch auf das, was hier behauptet wird. |
 | `scripts/entkopplung-check.sh` | Die Architekturzusagen aus README und DECISIONS.md halten. |
 | `scripts/link-check.mjs` | Kein Verweis zwischen den Dokumenten zeigt ins Leere. |
+| `scripts/budget-check.mjs` | Keine Seite überschreitet das Gewicht, das hier oben steht. Braucht einen Build und läuft deshalb nur in der CI, nicht vor dem Commit. |
 
 Der Beleg-Check prüft nicht nur, ob eine Datei existiert, sondern ob die
 belegte **Zeile** noch den behaupteten Inhalt trägt. Das ist der lautlose Fall:
@@ -163,9 +186,10 @@ Diese Schritte brauchen Zugänge, die nur Gabriel hat:
    eintragen. Erst dann ist Anforderung 4 vollständig belegt.
 6. **Fallback prüfen** wie in `SCHEMA.md` beschrieben — ein nicht registrierter
    Blok muss den Platzhalter zeigen, nicht die Seite kippen.
-7. **Token als GitHub-Secret hinterlegen.** Erst dann kann die CI auch
-   `next build` prüfen; das Gerüst dafür steht auskommentiert in
-   `.github/workflows/ci.yml`.
+7. **Token als GitHub-Secret hinterlegen.** Die CI baut inzwischen gegen die
+   Fixtures und misst dabei das Seitengewicht. Was weiterhin ungeprüft ist: ob
+   der Abruf gegen den echten Space funktioniert. Das Gerüst für den zweiten
+   Build steht auskommentiert in `.github/workflows/ci.yml`.
 
 ## Selbsteinschätzung
 

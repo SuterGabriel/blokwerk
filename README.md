@@ -54,7 +54,10 @@ bash scripts/entkopplung-check.sh
 Es prüft drei Zusagen — dass die Darstellungsschicht das CMS nicht kennt, dass
 `storyblokEditable` in der Naht bleibt, und dass die eigenen Typen nur
 `import type` benutzen. Zusammen mit dem Beleg- und dem Verweis-Check läuft es
-vor jedem Commit und in der CI. Was die Gates prüfen und warum, steht in
+vor jedem Commit und in der CI.
+
+Ein viertes Gate misst nach dem Build, was ein Browser pro Seite lädt, und
+hält die Zahl fest. Was die Gates prüfen und warum, steht in
 [docs/PIPELINE.md](./docs/PIPELINE.md).
 
 Warum das so gebaut ist, steht in [DECISIONS.md](./DECISIONS.md).
@@ -67,6 +70,20 @@ Zone im Wireframe welche Datei geworden ist, und welche drei Punkte aus der
 Vorlage noch offen sind.
 
 ## Lokal starten
+
+Ohne Zugangsdaten, gegen Beispielinhalte:
+
+```bash
+npm install
+npm run dev:fixtures
+```
+
+Das startet die Seite mit den Inhalten aus `src/lib/storyblok/fixtures/` statt
+mit einem CMS dahinter. Ein Hinweis über dem Header sagt das auch auf der Seite.
+Wozu der Weg da ist, steht in [DECISIONS.md](./DECISIONS.md), Punkt 11 — kurz:
+Ohne ihn kann weder die CI bauen noch irgendjemand messen, was die Seite wiegt.
+
+Gegen den echten Space:
 
 ```bash
 npm install

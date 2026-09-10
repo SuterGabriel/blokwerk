@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
+import FixtureHinweis from "@/components/ui/FixtureHinweis";
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import "./globals.css";
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de-CH" className={`${inter.variable} ${sourceSerif.variable}`}>
       <body className="flex min-h-screen flex-col">
+        <FixtureHinweis />
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />

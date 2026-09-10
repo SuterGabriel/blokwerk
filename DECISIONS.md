@@ -149,3 +149,73 @@ Die Grenze der Entscheidung: Bei mehr als 50 Artikeln greift `per_page` in
 `src/lib/storyblok/fetch.ts`, und die Seite bräuchte Pagination. Für ein Studio
 mit drei Beiträgen im Quartal ist das keine offene Flanke, aber es ist eine
 bekannte.
+
+## 11. Ein zweiter Inhaltsweg für den Build: Fixtures
+
+Ohne Storyblok-Token bricht `next build` ab. Das ist richtig so — aber es hatte
+eine Folge, die niemand wollte: Die CI konnte nicht bauen, also gab es keine
+Zahl zu „performant" aus Anforderung 4, und der einzige Beweis, dass die Seite
+überhaupt durchbaut, war ein Lauf auf meinem Rechner.
+
+`src/lib/storyblok/fixtures/` liefert dieselben Inhalte ohne API dahinter.
+Aktiv wird der Weg über `BLOKWERK_FIXTURES=1`, gesetzt von `npm run
+build:fixtures`.
+
+Drei Entscheidungen darin sind nicht selbstverständlich:
+
+**Der Schalter ist ausdrücklich, nicht abgeleitet.** Naheliegend wäre gewesen:
+kein Token, also Fixtures. Dann liefert aber ein Deployment, bei dem jemand das
+Secret vergisst, still Beispielinhalte aus — und niemand merkt es, weil die
+Seite gut aussieht. Mit einer eigenen Variable bricht dieser Fall weiterhin
+laut ab.
+
+**Die Fixtures liegen im Format der Storyblok-API, nicht im eigenen Format.**
+Das wirkt umständlich — man hätte direkt Objekte aus `lib/types.ts` schreiben
+können. Dann liefe der Adapter aber nicht mit, und der Build prüfte genau die
+Stelle nicht, an der die meiste Logik sitzt. Die Fixtures ersetzen den
+Transport, nicht das Datenformat. Was sie deshalb **nicht** belegen: dass ein
+Wechsel des CMS billig wäre. Die Feldnamen sind weiterhin Storybloks.
+
+**Der Fixture-Betrieb sagt es auf der Seite selbst.**
+`components/ui/FixtureHinweis.tsx` blendet eine Zeile über dem Header ein. Ein
+Screenshot einer Seite mit erfundenen Inhalten sieht aus wie eine gepflegte
+Website; das gehört auf das Bild und nicht nur in eine README, die beim
+Weiterschicken abfällt.
+
+Ein Nebeneffekt war nicht geplant: Die Seite `studio` enthält einen Blok
+`interactive_timeline`, der bewusst nicht registriert ist. Damit zeigt der
+Fixture-Betrieb das Abnahmekriterium aus SCHEMA.md, ohne dass jemand dafür
+einen Space anlegen muss.
+
+## 12. Ein Seitenbudget, das die eigene Behauptung widerlegt
+
+`scripts/budget-check.mjs` misst, was ein Browser beim ersten Aufruf lädt:
+HTML, JavaScript und CSS gzip-komprimiert, Schriften roh.
+
+Das Ergebnis war unbequem. Der Baustein `text_image` auf der Startseite
+verspricht ein „festes Seitenbudget von 180 Kilobyte". Gemessen wurden 296,7 KB
+auf der schwersten Seite. Die Aufteilung erklärt, warum:
+
+| Anteil | gzip |
+|---|---|
+| Framework (React, Next.js App Router) | rund 190 KB |
+| Zwei Schriften, Latin-Subset | 97 KB |
+| Eigenes CSS | 4,5 KB |
+| HTML der Startseite | 7,2 KB |
+
+Der eigene Anteil an dieser Seite liegt bei etwa vier Prozent. Die 180 KB sind
+mit diesem Stack nicht erreichbar, egal wie sparsam der Code ist.
+
+Drei Möglichkeiten gab es. Die Zahl im Fliesstext heimlich anheben — dann
+stimmt die Doku und die Aussage ist wertlos. Das Gate weglassen — dann bleibt
+„performant" eine Behauptung. Oder beides stehen lassen und die Lücke benennen.
+
+Das Gate hält deshalb 305 KB: die gemessene Wirklichkeit mit etwas Luft, als
+Ratsche gegen unbemerktes Wachstum. Die 180 KB bleiben als Anspruch im Text
+stehen. Wer im Gespräch danach fragt, bekommt die Tabelle oben — und die
+Antwort, dass ein Studio mit diesem Versprechen kein React ausliefern würde.
+
+Was das Gate nicht misst: Geschwindigkeit. Gewicht ist nicht Latenz, und weder
+Caching noch Largest Contentful Paint tauchen darin auf. Dafür braucht es einen
+Lighthouse-Lauf gegen ein Deployment. Bilder fehlen ebenfalls, die Fixtures
+haben keine.

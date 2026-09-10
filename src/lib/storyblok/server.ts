@@ -3,6 +3,26 @@ import UnknownBlock from "@/components/blocks/UnknownBlock";
 import { components } from "./components";
 
 /**
+ * Ein Aufruf von storyblokInit tut zwei Dinge: Er baut den API-Client, und er
+ * registriert die Komponenten-Map samt Fallback. Das zweite braucht auch der
+ * Fixture-Betrieb, in dem es keinen Client gibt — deshalb steht es hier
+ * getrennt statt als Nebenwirkung des Abrufs.
+ */
+function init(accessToken: string) {
+  return storyblokInit({
+    accessToken,
+    // Ohne Token kein apiPlugin: Es meldet sonst bei jedem Aufruf, dass ein
+    // Zugriffstoken fehle — richtig, aber im Fixture-Betrieb kein Befund.
+    // Fuenfzehn solcher Zeilen in einem gruenen Build gewoehnen einem an,
+    // ueber Warnungen hinwegzulesen.
+    ...(accessToken ? { use: [apiPlugin], apiOptions: { region: "eu" as const } } : {}),
+    components,
+    enableFallbackComponent: true,
+    customFallbackComponent: UnknownBlock,
+  })();
+}
+
+/**
  * Zwei Token, zwei Zustaende.
  *
  * preview === false ist der Normalfall und kann technisch keine Entwuerfe
@@ -20,12 +40,13 @@ export const getStoryblokApi = (preview = false) => {
     );
   }
 
-  return storyblokInit({
-    accessToken,
-    use: [apiPlugin],
-    apiOptions: { region: "eu" },
-    components,
-    enableFallbackComponent: true,
-    customFallbackComponent: UnknownBlock,
-  })();
+  return init(accessToken);
+};
+
+/**
+ * Fixture-Betrieb: kein Token, kein Client, aber die Bloks muessen gerendert
+ * werden koennen. Registriert nur die Komponenten-Map.
+ */
+export const registriereKomponenten = () => {
+  init("");
 };

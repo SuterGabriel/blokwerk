@@ -2,19 +2,21 @@
 
 Blokwerk behauptet an mehreren Stellen etwas über sich selbst: die README
 beschreibt eine Trennung zwischen Darstellung und CMS, `DECISIONS.md`
-begründet acht Entscheidungen, `docs/ANFORDERUNGEN.md` ordnet jeder
+begründet zwölf Entscheidungen, `docs/ANFORDERUNGEN.md` ordnet jeder
 Anforderung einer Ausschreibung eine Stelle im Code zu.
 
-Drei Skripte machen aus diesen Behauptungen Zusagen, die kaputtgehen können.
-Alle drei laufen ohne Abhängigkeiten und zusammen unter einer Sekunde.
+Vier Skripte machen aus diesen Behauptungen Zusagen, die kaputtgehen können.
+Drei davon laufen ohne Abhängigkeiten und zusammen unter einer Sekunde. Das
+vierte braucht einen Build und läuft deshalb nur in der CI.
 
-## Die drei Gates
+## Die Gates
 
 | Gate | Prüft | Aufruf |
 |---|---|---|
 | Entkopplung | Die Darstellungsschicht kennt kein CMS | `bash scripts/entkopplung-check.sh` |
 | Belege | Jeder Beleg in der Anforderungsmappe zeigt noch auf das Behauptete | `bash scripts/beleg-check.sh` |
 | Verweise | Kein Markdown-Verweis im Repo zeigt ins Leere | `node scripts/link-check.mjs` |
+| Seitenbudget | Keine Seite überschreitet 305 KB Übertragungsgewicht | `node scripts/budget-check.mjs` |
 
 ### Entkopplung
 
@@ -59,6 +61,29 @@ Ignorierliste. Prüft ausschliesslich Markdown-Verweise der Form `[Text](Ziel)`.
 Pfade in Backticks werden bewusst nicht geprüft — ein Verweis in Klammern ist
 eine Zusage für jetzt, ein Pfad in Backticks kann eine Ansage für später sein.
 
+### Seitenbudget
+
+Das einzige Gate, das nicht Aussagen prüft, sondern die Seite selbst. Es liest
+die vorgerenderten HTML-Dateien aus `.next/server/app/`, sammelt jede darin
+referenzierte Datei unter `/_next/` und rechnet zusammen, was ein Browser beim
+ersten Aufruf lädt: HTML, JavaScript und CSS gzip-komprimiert, Schriften roh,
+weil woff2 bereits komprimiert ist.
+
+Es setzt einen Build voraus, und den gibt es ohne Storyblok-Token nur gegen die
+Fixtures:
+
+```bash
+npm run build:fixtures
+node scripts/budget-check.mjs
+```
+
+Die Grenze von 305 KB ist die gemessene Wirklichkeit mit etwas Luft, kein
+erreichtes Ziel. Die Startseite verspricht im Fliesstext 180 Kilobyte; warum
+diese Zahl mit React und Next.js nicht erreichbar ist und warum sie trotzdem
+stehen bleibt, steht in `DECISIONS.md`, Punkt 12.
+
+Nicht gemessen wird Geschwindigkeit. Gewicht ist nicht Latenz.
+
 ## Vor dem Commit
 
 ```bash
@@ -72,18 +97,20 @@ Option.
 
 ## In der CI
 
-`.github/workflows/ci.yml`, zwei Jobs.
+`.github/workflows/ci.yml`, drei Jobs.
 
-**Was geprüft wird:** die drei Gates, `tsc --noEmit`, `next lint`.
+**Was geprüft wird:** die drei schnellen Gates, `tsc --noEmit`, ESLint, ein
+vollständiger `next build` gegen die Fixtures und danach das Seitenbudget.
 
-**Was nicht geprüft wird:** `next build`. Der Build ruft beim Sammeln der
-Seitendaten die Storyblok-API auf und braucht dafür einen Token. Ohne
-hinterlegte Secrets bricht er ab — nicht wegen eines Fehlers im Code, sondern
-weil `src/lib/storyblok/server.ts:18` genau das meldet.
+**Was nicht geprüft wird:** der Build gegen den echten Space. Er ruft beim
+Sammeln der Seitendaten die Storyblok-API auf und braucht einen Token; ohne
+hinterlegtes Secret bricht er ab — nicht wegen eines Fehlers im Code, sondern
+weil `src/lib/storyblok/server.ts` genau das meldet.
 
-Ein Job, der das verschweigt und trotzdem grün meldet, wäre schlimmer als kein
-Job. Sobald `STORYBLOK_PUBLIC_TOKEN` als Repository-Secret hinterlegt ist,
-kommt der Build-Job dazu; das auskommentierte Gerüst steht in der Datei.
+Der Fixture-Build ersetzt ihn nicht. Er beweist, dass die Seite baut und wie
+schwer sie ist, nicht dass der Abruf funktioniert. Sobald
+`STORYBLOK_PUBLIC_TOKEN` als Repository-Secret hinterlegt ist, kommt der
+zweite Build dazu; das auskommentierte Gerüst steht in der Datei.
 
 ## Warum das hier steht
 

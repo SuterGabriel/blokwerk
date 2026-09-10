@@ -58,17 +58,36 @@ jobs:
       - name: Lint
         run: npm run lint
 
+  bau:
+    name: Build und Seitenbudget
+    runs-on: ubuntu-latest
+    # Baut die Seite gegen die Fixtures aus src/lib/storyblok/fixtures/ und
+    # misst danach, was ein Browser pro Seite laedt. Ohne diesen Job stuende
+    # "performant" in docs/ANFORDERUNGEN.md ohne eine einzige Zahl daneben.
+    #
+    # Warum Fixtures und nicht der echte Space: next build ruft beim Sammeln
+    # der Seitendaten die Storyblok-API. Ein Job, der auf ein Secret wartet,
+    # das noch niemand hinterlegt hat, laeuft nie — und prueft entsprechend nie.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Abhängigkeiten
+        run: npm ci
+      - name: Build gegen Fixtures
+        run: npm run build:fixtures
+      - name: Seitenbudget prüfen
+        run: node scripts/budget-check.mjs
+
   # --- Sobald die Token als Secrets hinterlegt sind ------------------------
-  # Bewusst als auskommentiertes Gerüst, nicht als Job, der den Build
-  # überspringt und trotzdem grün meldet. Ein Job, der nichts prüft und Erfolg
-  # meldet, ist schlimmer als kein Job.
+  # Der Build oben laeuft gegen Fixtures. Er beweist, dass die Seite baut und
+  # wie schwer sie ist — nicht, dass der Abruf gegen den echten Space
+  # funktioniert. Dafuer braucht es einen Lesetoken unter Settings -> Secrets;
+  # dann kommt hier ein zweiter Build ohne BLOKWERK_FIXTURES dazu:
   #
-  # `next build` ruft beim Sammeln der Seitendaten die Storyblok-API auf. Ohne
-  # Token bricht er ab — nicht wegen eines Fehlers im Code, sondern weil
-  # src/lib/storyblok/server.ts:18 genau das meldet. Der Job ist deshalb erst
-  # sinnvoll, wenn unter Settings -> Secrets ein Lesetoken liegt.
-  #
-  # build:
+  # build-echt:
   #   name: Build gegen echte Inhalte
   #   runs-on: ubuntu-latest
   #   steps:
@@ -82,6 +101,6 @@ jobs:
   #       env:
   #         STORYBLOK_PUBLIC_TOKEN: ${{ secrets.STORYBLOK_PUBLIC_TOKEN }}
   #
-  # Ebenfalls offen, sobald ein Deployment existiert: ein Lighthouse-Lauf, der
-  # die Zusage "performant" aus docs/ANFORDERUNGEN.md mit Zahlen belegt statt
-  # sie zu behaupten.
+  # Ebenfalls offen, sobald ein Deployment existiert: ein Lighthouse-Lauf. Das
+  # Seitenbudget misst Gewicht, nicht Geschwindigkeit — es sagt nichts ueber
+  # Latenz, Caching oder Largest Contentful Paint.

@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:fixtures": "node scripts/mit-fixtures.mjs dev",
     "build": "next build",
+    "build:fixtures": "node scripts/mit-fixtures.mjs build",
     "start": "next start",
+    "start:fixtures": "node scripts/mit-fixtures.mjs start",
     "typecheck": "tsc --noEmit",
     "lint": "eslint ."
   },

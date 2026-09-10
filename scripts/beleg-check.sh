@@ -113,11 +113,13 @@ src/app/api/revalidate/route.ts|35|revalidatePath
 src/app/preview/layout.tsx|13|draftMode
 src/lib/storyblok/components.ts|13|export const components
 src/lib/storyblok/components.ts|25|RESOLVE_RELATIONS
-src/lib/storyblok/server.ts|12|getStoryblokApi
-src/lib/storyblok/server.ts|28|enableFallbackComponent
-src/lib/storyblok/fetch.ts|9|version: preview
-src/lib/storyblok/fetch.ts|10|resolve_relations
+src/lib/storyblok/server.ts|32|getStoryblokApi
+src/lib/storyblok/server.ts|20|enableFallbackComponent
+src/lib/storyblok/fetch.ts|10|version: preview
+src/lib/storyblok/fetch.ts|11|resolve_relations
 src/lib/storyblok/adapters.ts|86|toArticleTeaser
+src/lib/storyblok/fixtures/index.ts|17|BLOKWERK_FIXTURES
+src/lib/storyblok/fetch.ts|29|registriereKomponenten
 src/components/ui/SbImage.tsx|24|a.storyblok.com
 src/components/ui/SbImage.tsx|25|filters:format(webp)
 ANKER
@@ -138,7 +140,13 @@ pruefe "docs/PIPELINE.md erklaert die Gates" datei docs/PIPELINE.md
 pruefe "der Git-Hook liegt im Repo" datei .githooks/pre-commit
 pruefe "die Einrichtung ist mitgeliefert" datei scripts/hooks-installieren.sh
 pruefe "die CI liegt im Repo" datei .github/workflows/ci.yml
-pruefe "die CI faehrt die drei Gates"   bash -c 'test "$(grep -c "check" .github/workflows/ci.yml)" -ge 3'
+pruefe "die CI faehrt die vier Gates"   bash -c 'test "$(grep -c "check" .github/workflows/ci.yml)" -ge 4'
+# Der Fixture-Betrieb ist die Voraussetzung dafuer, dass die CI ueberhaupt
+# bauen und messen kann. Faellt er weg, faellt die Messung mit ihm.
+pruefe "der Fixture-Betrieb ist da" datei src/lib/storyblok/fixtures/index.ts
+pruefe "die Fixtures sagen es auf der Seite" datei src/components/ui/FixtureHinweis.tsx
+pruefe "die CI baut gegen Fixtures" enthaelt .github/workflows/ci.yml "build:fixtures"
+pruefe "das Budget-Gate existiert" datei scripts/budget-check.mjs
 # Solange kein Deployment steht, darf die README keine Live-URL versprechen.
 pruefe "README verspricht keine tote Live-URL" \
   bash -c '! grep -q "^\*\*Live:\*\* https://" README.md'
