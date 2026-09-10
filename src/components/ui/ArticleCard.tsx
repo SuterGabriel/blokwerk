@@ -5,7 +5,10 @@ import type { ArticleTeaser } from "@/lib/types";
 
 export default function ArticleCard({ article }: { article: ArticleTeaser }) {
   return (
-    <article className="group border border-line bg-paper transition-colors hover:border-ink">
+    // relative gehoert an die Karte, nicht an einen Wrapper: Der Link unten
+    // spannt sich per absolute ueber die ganze Flaeche und braucht diesen
+    // Bezugspunkt. Ohne ihn springt er an den naechsten positionierten Vorfahren.
+    <article className="group relative border border-line bg-paper transition-colors hover:border-ink">
       {article.image && (
         <SbImage
           image={article.image}

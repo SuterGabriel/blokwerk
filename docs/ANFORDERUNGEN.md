@@ -38,6 +38,7 @@ React Native.
 | Metadaten je Artikel inkl. Open Graph | `generateMetadata` ebenda, Zeile 19–40 |
 | Draft Mode | `src/app/preview/layout.tsx:13` |
 | Routing mit Catch-all und optionalem Catch-all | `src/app/[...slug]/` und `src/app/preview/[[...slug]]/` |
+| Statische Route neben dem Catch-all | `src/app/journal/page.tsx:7` — eigene Uebersichtsseite, Begruendung `DECISIONS.md` Punkt 10 |
 | `robots.txt` und Sitemap als Code | `src/app/robots.ts`, `src/app/sitemap.ts` |
 
 Anmerkung zur Ehrlichkeit: Das ist ein Einarbeitungsprojekt, keine Kundenarbeit.
@@ -87,7 +88,7 @@ vollständige Entkopplung dort teurer gewesen wäre als der Nutzen.
 
 | Konzept | Beleg |
 |---|---|
-| Responsive Umsetzung | Tailwind-Breakpoints durchgehend, etwa `sm:grid-cols-2` in `artikel/[slug]/page.tsx:103` |
+| Responsive Umsetzung | Tailwind-Breakpoints durchgehend, etwa `sm:grid-cols-2` in `src/components/ui/ArticleGrid.tsx:20` |
 | `sizes` statt fester Bildbreiten | `artikel/[slug]/page.tsx:78` |
 | Serverseitige Skalierung und WebP | `src/components/ui/SbImage.tsx:25` |
 | `priority` für das Bild above the fold | `artikel/[slug]/page.tsx:77` |
@@ -145,7 +146,10 @@ würde — dort liegt die einzige nennenswerte Logik.
 Diese Schritte brauchen Zugänge, die nur Gabriel hat:
 
 1. **Storyblok-Space anlegen** nach `SCHEMA.md`, Region EU, Inhalte einpflegen
-   (mindestens fünf Artikel plus eine Story `home`).
+   (mindestens fünf Artikel plus eine Story `home`). Dazu die drei Seiten
+   `arbeiten`, `studio` und `kontakt` — der Header verlinkt sie, und ohne Story
+   liefert der Catch-all dort ein 404. `/journal` braucht das nicht, die Seite
+   ist eine eigene Route (`DECISIONS.md` Punkt 10).
 2. **Beide Token** in `.env.local` eintragen, `npm run dev` gegen echte Inhalte
    prüfen.
 3. **Auf Vercel deployen.** Solange das nicht steht, verspricht `README.md` eine

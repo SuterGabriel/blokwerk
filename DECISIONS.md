@@ -127,3 +127,25 @@ dabei bewusst, worauf der Beleg zeigt.
 Der Gedanke stammt aus dem Schwesterprojekt Aptum, wo ArchUnit die
 Domänenschicht absichert. Der Zuschnitt hier ist kleiner, absichtlich: Ein
 Prüfapparat, der grösser wäre als die geprüfte Sache, zeigt kein Augenmass.
+
+## 10. Die Journal-Übersicht ist Code, kein Eintrag im CMS
+
+Header und Footer verweisen auf `/journal`. Diese Seite hätte man als Story
+`journal` mit einem `teaser_grid` darin anlegen können — dann wäre sie
+vollständig redaktionell steuerbar gewesen, wie jede andere Seite.
+
+Dagegen spricht, wofür eine Übersicht da ist. Ein `teaser_grid` ist eine
+*Auswahl*: Die Redaktion entscheidet, welche drei Artikel auf der Startseite
+stehen. Eine Übersicht ist das Gegenteil, sie enthält alles. Als Story müsste
+jemand nach jeder Veröffentlichung daran denken, den neuen Artikel zu
+ergänzen — und der Fehler dabei ist lautlos: Die Seite sieht vollständig aus,
+ihr fehlt nur der neueste Beitrag.
+
+`src/app/journal/page.tsx` fragt deshalb selbst nach allen Artikeln, sortiert
+nach Datum, und ist damit nie veraltet. Was die Redaktion hier steuert, ist die
+Reihenfolge über das Feld `date` — nicht die Mitgliedschaft in einer Liste.
+
+Die Grenze der Entscheidung: Bei mehr als 50 Artikeln greift `per_page` in
+`src/lib/storyblok/fetch.ts`, und die Seite bräuchte Pagination. Für ein Studio
+mit drei Beiträgen im Quartal ist das keine offene Flanke, aber es ist eine
+bekannte.

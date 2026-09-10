@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import SbImage from "@/components/ui/SbImage";
 import Meta, { formatDate } from "@/components/ui/Meta";
-import ArticleCard from "@/components/ui/ArticleCard";
+import ArticleGrid from "@/components/ui/ArticleGrid";
 import { getAllSlugs, getArticles, getStory } from "@/lib/storyblok/fetch";
 import { toArticle, toArticleTeaser } from "@/lib/storyblok/adapters";
 import type { ArticleTeaser } from "@/lib/types";
@@ -100,12 +100,8 @@ export default async function ArticlePage({
           <h2 className="border-b border-line pb-4 font-serif text-2xl tracking-tight">
             Weiterlesen
           </h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            {related.map((item) => (
-              <div key={item.slug} className="relative">
-                <ArticleCard article={item} />
-              </div>
-            ))}
+          <div className="mt-8">
+            <ArticleGrid articles={related} columns={2} />
           </div>
         </section>
       )}

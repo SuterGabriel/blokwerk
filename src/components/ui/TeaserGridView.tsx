@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ArticleCard from "./ArticleCard";
+import ArticleGrid from "./ArticleGrid";
 import type { TeaserGrid } from "@/lib/types";
 
 /**
@@ -37,13 +37,7 @@ export default function TeaserGridView({ headline, moreLink, articles }: TeaserG
       {articles.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {articles.map((article) => (
-            <div key={article.slug} className="relative">
-              <ArticleCard article={article} />
-            </div>
-          ))}
-        </div>
+        <ArticleGrid articles={articles} />
       )}
     </section>
   );
