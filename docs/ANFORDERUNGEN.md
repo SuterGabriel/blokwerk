@@ -165,7 +165,8 @@ würde — dort liegt die einzige nennenswerte Logik.
 
 ## Offene Punkte bis zur Bewerbungsreife
 
-Diese Schritte brauchen Zugänge, die nur Gabriel hat:
+Diese Schritte brauchen Zugänge, die nur Gabriel hat. Der Weg dafür steht in
+[EINRICHTUNG.md](./EINRICHTUNG.md):
 
 1. **Storyblok-Space anlegen**, Region EU. Die Komponenten liegen als
    `storyblok/components.json` für die Storyblok-CLI bereit, die Inhalte als

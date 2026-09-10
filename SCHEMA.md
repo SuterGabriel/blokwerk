@@ -84,6 +84,9 @@ Alle Artikel im Ordner `artikel/` anlegen, damit CMS-Pfad und Route
 
 ## Schneller als abtippen
 
+Die vollständige Anleitung mit allen Schritten steht in
+[docs/EINRICHTUNG.md](./docs/EINRICHTUNG.md). Kurzfassung:
+
 Die Komponenten oben liegen als JSON im Format der Storyblok-CLI bereit, die
 Beispielinhalte als Seed-Skript:
 

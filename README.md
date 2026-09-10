@@ -9,6 +9,10 @@ den vollständigen Weg einmal zeigen: vom Inhaltsmodell im CMS über die
 Auslieferung per API bis zur statisch gebauten Seite, die sich bei einer
 Veröffentlichung gezielt selbst erneuert.
 
+Den Weg von einem leeren Storyblok-Konto bis zur deployten Seite beschreibt
+[docs/EINRICHTUNG.md](./docs/EINRICHTUNG.md), Schritt für Schritt und mit einer
+Prüfung nach jedem.
+
 **Live:** noch nicht deployt. Die URL wird hier eingetragen, sobald der
 Storyblok-Space steht — bis dahin wäre sie ein totes Versprechen. Welche
 Schritte dafür offen sind, steht in [docs/ANFORDERUNGEN.md](./docs/ANFORDERUNGEN.md).
