@@ -44,18 +44,17 @@ weil man für sie das CMS kaputtmachen muss. Sie sind umgesetzt:
 
 Der Stand:
 
-- **Mobile Navigation.** Wireframe 3 zeigt im Header ein Menüsymbol,
-  [Header.tsx](../../src/components/ui/Header.tsx) rendert die vier Links auf
-  jeder Breite nebeneinander.
 - **Zweiter Hero-Button.** Das Mockup zeigt „Projekt anfragen“ und „Journal
   lesen“. Die Komponente kann beides
   ([HeroView.tsx](../../src/components/ui/HeroView.tsx)), das Schema hat das
   Feld — es hängt nur an Inhalten im Space.
 
-Der dritte Punkt aus dem Mockup, die **Artikelübersicht**, ist inzwischen
-gebaut: [journal/page.tsx](../../src/app/journal/page.tsx). Sie ist eine eigene
-Route und keine Story im CMS — warum, steht in
-[DECISIONS.md](../../DECISIONS.md), Punkt 10.
+Zwei weitere Punkte sind inzwischen gebaut: die **Artikelübersicht** als eigene
+Route ([journal/page.tsx](../../src/app/journal/page.tsx), begründet in
+[DECISIONS.md](../../DECISIONS.md) Punkt 10) und die **mobile Navigation** aus
+Wireframe 3 ([Header.tsx](../../src/components/ui/Header.tsx)) — ein
+Klappmenü als `<details>`, das ohne JavaScript auskommt und das Seitengewicht
+um 0,4 KB erhöht hat.
 
-Die beiden verbliebenen stehen im Mockup unter „Nächste Schritte“ und sind
-bewusst offen geblieben, nicht übersehen.
+Was bleibt, steht im Mockup unter „Nächste Schritte“ und ist bewusst offen
+geblieben, nicht übersehen.

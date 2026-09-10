@@ -43,7 +43,7 @@ const seitenVerzeichnis = join(build, "server", "app");
 /**
  * Kilobyte, pro Seite, fuer HTML plus JS plus CSS plus Schriften.
  *
- * Gemessen am 10.09.2026: schwerste Seite 296.7 KB. Die Grenze liegt knapp
+ * Gemessen am 10.09.2026: schwerste Seite 297.1 KB. Die Grenze liegt knapp
  * darueber. Wer sie anhebt, soll das begruenden muessen.
  */
 const BUDGET_KB = 305;

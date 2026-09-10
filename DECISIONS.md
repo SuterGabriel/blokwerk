@@ -193,7 +193,7 @@ einen Space anlegen muss.
 HTML, JavaScript und CSS gzip-komprimiert, Schriften roh.
 
 Das Ergebnis war unbequem. Der Baustein `text_image` auf der Startseite
-verspricht ein „festes Seitenbudget von 180 Kilobyte". Gemessen wurden 296,7 KB
+verspricht ein „festes Seitenbudget von 180 Kilobyte". Gemessen wurden 297,1 KB
 auf der schwersten Seite. Die Aufteilung erklärt, warum:
 
 | Anteil | gzip |

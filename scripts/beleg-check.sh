@@ -120,6 +120,8 @@ src/lib/storyblok/fetch.ts|11|resolve_relations
 src/lib/storyblok/adapters.ts|86|toArticleTeaser
 src/lib/storyblok/fixtures/index.ts|17|BLOKWERK_FIXTURES
 src/lib/storyblok/fetch.ts|29|registriereKomponenten
+src/components/ui/Header.tsx|49|sm:hidden
+src/app/sitemap.ts|18|STATISCHE_ROUTEN
 src/components/ui/SbImage.tsx|24|a.storyblok.com
 src/components/ui/SbImage.tsx|25|filters:format(webp)
 ANKER

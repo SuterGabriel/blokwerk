@@ -94,6 +94,7 @@ braucht es ein Deployment.
 | Konzept | Beleg |
 |---|---|
 | Responsive Umsetzung | Tailwind-Breakpoints durchgehend, etwa `sm:grid-cols-2` in `src/components/ui/ArticleGrid.tsx:20` |
+| Navigation, die auf 390 Pixeln funktioniert | `src/components/ui/Header.tsx:49` — Klappmenü als `<details>`, ohne Client-Komponente und damit ohne zusätzliches JavaScript |
 | `sizes` statt fester Bildbreiten | `artikel/[slug]/page.tsx:78` |
 | Serverseitige Skalierung und WebP | `src/components/ui/SbImage.tsx:25` |
 | `priority` für das Bild above the fold | `artikel/[slug]/page.tsx:77` |
@@ -103,16 +104,11 @@ braucht es ein Deployment.
 | Gemessenes Seitengewicht | `scripts/budget-check.mjs`, in der CI nach jedem Build |
 | Build ohne Zugangsdaten, damit die Messung überhaupt läuft | `src/lib/storyblok/fixtures/index.ts:17`, Begründung `DECISIONS.md` Punkt 11 |
 
-Offen, erstens: Die mobile Navigation fehlt. Das Wireframe zeigt bei 390 Pixeln
-ein Menüsymbol, `src/components/ui/Header.tsx` rendert die vier Links auf jeder
-Breite nebeneinander. Bei vier kurzen Wörtern fällt das nicht auf, aber es ist
-keine responsive Navigation, sondern eine, die zufällig noch passt.
-
 Die Messung, Stand 10.09.2026, gebaut gegen die Fixtures und ohne Bilder:
 
 | | |
 |---|---|
-| Schwerste Seite | 296,7 KB (Startseite) |
+| Schwerste Seite | 297,1 KB (Startseite) |
 | Leichteste gemessene Seite | 179,8 KB (404) |
 | Davon Framework | rund 190 KB gzip |
 | Davon zwei Schriften | 97 KB |
@@ -184,8 +180,11 @@ Diese Schritte brauchen Zugänge, die nur Gabriel hat:
 4. **Webhook einrichten** (`Settings → Webhooks`, Story published/unpublished).
 5. **Lighthouse gegen das Deployment laufen lassen** und die Zahlen hier
    eintragen. Erst dann ist Anforderung 4 vollständig belegt.
-6. **Fallback prüfen** wie in `SCHEMA.md` beschrieben — ein nicht registrierter
-   Blok muss den Platzhalter zeigen, nicht die Seite kippen.
+6. ~~**Fallback prüfen**~~ — erledigt und dauerhaft geprüft: Die Fixture-Seite
+   `studio` enthält einen Blok `interactive_timeline`, der nicht registriert
+   ist. Jeder CI-Build rendert ihn als Platzhalter. Im echten Space bleibt die
+   Probe trotzdem sinnvoll, weil dort das CMS den Bloknamen liefert und nicht
+   eine Datei im Repo.
 7. **Token als GitHub-Secret hinterlegen.** Die CI baut inzwischen gegen die
    Fixtures und misst dabei das Seitengewicht. Was weiterhin ungeprüft ist: ob
    der Abruf gegen den echten Space funktioniert. Das Gerüst für den zweiten
