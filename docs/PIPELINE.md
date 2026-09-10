@@ -112,6 +112,27 @@ schwer sie ist, nicht dass der Abruf funktioniert. Sobald
 `STORYBLOK_PUBLIC_TOKEN` als Repository-Secret hinterlegt ist, kommt der
 zweite Build dazu; das auskommentierte Gerüst steht in der Datei.
 
+## Die Lockfile
+
+`package-lock.json` wird in einem Linux-Container erzeugt, nicht auf dem
+Entwicklungsrechner:
+
+```bash
+docker run --rm -v "C:lokwerk:/app" -w /app node:24-bookworm   npm install --package-lock-only
+```
+
+Der Grund ist ein Fall, der lokal nicht auffallen kann. npm schreibt beim
+Auflösen unter Windows zwei transitive Pakete nicht in die Lockfile, die es
+unter Linux verlangt — `@emnapi/runtime` und `@emnapi/core`, beides
+Abhängigkeiten der WebAssembly-Varianten von sharp und Tailwind. Auf dem
+eigenen Rechner läuft danach alles; in der CI bricht `npm ci` mit der Meldung
+ab, Lockfile und `package.json` seien nicht synchron. Genau so ist der erste
+CI-Lauf dieses Projekts gescheitert.
+
+Die im Container erzeugte Lockfile enthält beide Plattformen — die win32-
+Einträge bleiben drin, `npm ci` läuft auf Windows und auf Linux. Wer
+Abhängigkeiten ändert, erzeugt sie wieder so.
+
 ## Warum das hier steht
 
 Diese Prüfungen stammen aus dem Schwesterprojekt Aptum, wo ArchUnit die
