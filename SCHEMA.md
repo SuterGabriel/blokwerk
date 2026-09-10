@@ -82,6 +82,26 @@ Alle Artikel im Ordner `artikel/` anlegen, damit CMS-Pfad und Route
 | `author` | Text |
 | `role` | Text |
 
+## Schneller als abtippen
+
+Die Komponenten oben liegen als JSON im Format der Storyblok-CLI bereit, die
+Beispielinhalte als Seed-Skript:
+
+```bash
+npx storyblok login
+npx storyblok push-components storyblok/components.json --space <id>
+
+STORYBLOK_SPACE_ID=<id> STORYBLOK_MANAGEMENT_TOKEN=<personal-access-token>   node scripts/storyblok-seed.mjs
+```
+
+Das Skript legt fünf Artikel und vier Seiten an, in dieser Reihenfolge, weil
+das Teaser-Grid die Artikel über ihre UUID referenziert. Es ist idempotent:
+Ein zweiter Lauf aktualisiert, statt zu verdoppeln. Was es vorher tut, zeigt
+`node scripts/storyblok-seed.mjs --dry-run`.
+
+Beides ist ungetestet gegen einen echten Space — geschrieben habe ich es ohne
+Zugang. Der Trockenlauf stimmt, der erste echte Lauf findet bei dir statt.
+
 ## Inhalte
 
 Mindestens fünf Artikel und eine Story `home` vom Typ `page`, sonst wirkt das

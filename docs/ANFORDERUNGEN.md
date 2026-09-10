@@ -167,8 +167,10 @@ würde — dort liegt die einzige nennenswerte Logik.
 
 Diese Schritte brauchen Zugänge, die nur Gabriel hat:
 
-1. **Storyblok-Space anlegen** nach `SCHEMA.md`, Region EU, Inhalte einpflegen
-   (mindestens fünf Artikel plus eine Story `home`). Dazu die drei Seiten
+1. **Storyblok-Space anlegen**, Region EU. Die Komponenten liegen als
+   `storyblok/components.json` für die Storyblok-CLI bereit, die Inhalte als
+   `scripts/storyblok-seed.mjs`; der Weg steht in `SCHEMA.md`. Beides ist gegen
+   einen echten Space ungetestet. Dazu die drei Seiten
    `arbeiten`, `studio` und `kontakt` — der Header verlinkt sie, und ohne Story
    liefert der Catch-all dort ein 404. `/journal` braucht das nicht, die Seite
    ist eine eigene Route (`DECISIONS.md` Punkt 10).

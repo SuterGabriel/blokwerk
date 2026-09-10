@@ -149,6 +149,8 @@ pruefe "der Fixture-Betrieb ist da" datei src/lib/storyblok/fixtures/index.ts
 pruefe "die Fixtures sagen es auf der Seite" datei src/components/ui/FixtureHinweis.tsx
 pruefe "die CI baut gegen Fixtures" enthaelt .github/workflows/ci.yml "build:fixtures"
 pruefe "das Budget-Gate existiert" datei scripts/budget-check.mjs
+pruefe "die Komponenten liegen als JSON bereit" datei storyblok/components.json
+pruefe "das Seed-Skript liegt bereit" datei scripts/storyblok-seed.mjs
 # Solange kein Deployment steht, darf die README keine Live-URL versprechen.
 pruefe "README verspricht keine tote Live-URL" \
   bash -c '! grep -q "^\*\*Live:\*\* https://" README.md'
