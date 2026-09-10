@@ -1,0 +1,12 @@
+# Zeilenenden explizit statt der Autokonvertierung ueberlassen.
+#
+# Der Grund ist konkret: Die CI laeuft auf Linux und fuehrt die Gates mit bash
+# aus. Ein Shell-Skript mit CRLF bricht dort mit einer Fehlermeldung, die auf
+# nichts hindeutet ("bad interpreter"). Auf einem Windows-Rechner entsteht
+# genau das, sobald jemand core.autocrlf anders gesetzt hat als der Naechste.
+*.sh   text eol=lf
+*.mjs  text eol=lf
+*.yml  text eol=lf
+
+# Der Hook wird von Git ausgefuehrt, gleiche Begruendung.
+.githooks/* text eol=lf
