@@ -1,8 +1,11 @@
 name: CI
 
+# master steht mit dabei, weil der Hauptzweig dieses Repos so heisst. Ein
+# Workflow, der auf einen Zweig horcht, den es nicht gibt, laeuft nie an und
+# meldet auch nichts — er sieht im Repo aus wie eine eingerichtete Pipeline.
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
 
 # Die Pipeline prüft, sie veröffentlicht nichts. Mehr Rechte braucht sie nicht.
