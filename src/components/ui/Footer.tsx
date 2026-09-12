@@ -29,8 +29,13 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-line">
-        <p className="mx-auto max-w-6xl px-6 py-5 text-xs text-ink-muted">
-          © {new Date().getFullYear()} Blokwerk GmbH
+        <p className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-1 px-6 py-5 text-xs text-ink-muted">
+          <span>© {new Date().getFullYear()} Blokwerk GmbH</span>
+          {/* Kein Impressum fuer ein Studio, das es nicht gibt — stattdessen
+              die Seite, die erklaert, was das hier ist. */}
+          <Link href="/kolophon" className="hover:text-ink">
+            Kolophon
+          </Link>
         </p>
       </div>
     </footer>

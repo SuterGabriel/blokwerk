@@ -15,7 +15,7 @@ export const revalidate = 3600;
  * sie hier ein. Automatisch ableiten liesse sich das nicht, ohne das
  * Dateisystem zu durchsuchen und dabei jede dynamische Route falsch zu raten.
  */
-const STATISCHE_ROUTEN = ["journal"];
+const STATISCHE_ROUTEN = ["journal", "kolophon"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

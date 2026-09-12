@@ -99,6 +99,7 @@ braucht es ein Deployment.
 | Konzept | Beleg |
 |---|---|
 | Responsive Umsetzung | Tailwind-Breakpoints durchgehend, etwa `sm:grid-cols-2` in `src/components/ui/ArticleGrid.tsx:20` |
+| Sprungmarke zum Inhalt, Kontrast gemessen | `src/app/layout.tsx:29` — Fliesstext 5,1:1, Akzent 7,3:1, beides über WCAG AA |
 | Navigation, die auf 390 Pixeln funktioniert | `src/components/ui/Header.tsx:49` — Klappmenü als `<details>`, ohne Client-Komponente und damit ohne zusätzliches JavaScript |
 | `sizes` statt fester Bildbreiten | `artikel/[slug]/page.tsx:78` |
 | Serverseitige Skalierung und WebP | `src/components/ui/SbImage.tsx:25` |
@@ -151,6 +152,17 @@ Begründung in [DECISIONS.md](../DECISIONS.md), Punkt 9.
 Was die Gates ausdrücklich **nicht** sind: Tests. Sie prüfen Aussagen über den
 Code, nicht sein Verhalten. Warum es keine Unit-Tests gibt, steht in
 DECISIONS.md, Punkt 7.
+
+## Für Leser der Live-Seite
+
+Wer die deployte Seite öffnet, sieht zuerst ein Digitalstudio, das es nicht
+gibt. Damit niemand raten muss, was daran zu beurteilen ist, erklärt
+`src/app/kolophon/page.tsx` das Projekt auf der Seite selbst: wie es gebaut
+ist, welche drei Zustände man sonst nie zu sehen bekommt, und wo der Quelltext
+liegt. Verlinkt im Footer.
+
+Bewusst eine Route im Code und keine Story: Die Seite beschreibt das Projekt,
+nicht das fiktive Studio. Eine Redaktion hätte dort nichts zu pflegen.
 
 ## Nicht abgedeckt
 

@@ -22,9 +22,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de-CH" className={`${inter.variable} ${sourceSerif.variable}`}>
       <body className="flex min-h-screen flex-col">
+        {/* Sprungmarke fuer Tastatur und Screenreader: sichtbar erst beim
+            Fokussieren. Ohne sie tabbt man auf jeder Unterseite erneut durch
+            die vier Navigationspunkte, bevor der Inhalt kommt. */}
+        <a
+          href="#inhalt"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border focus:border-line focus:bg-paper focus:px-4 focus:py-2 focus:text-sm"
+        >
+          Zum Inhalt springen
+        </a>
         <FixtureHinweis />
         <Header />
-        <div className="flex-1">{children}</div>
+        <div id="inhalt" className="flex-1">{children}</div>
         <Footer />
       </body>
     </html>
