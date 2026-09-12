@@ -36,6 +36,7 @@ React Native.
 | ISR | `export const revalidate = 3600` ebenda, Zeile 11 |
 | Gezielte Neuvalidierung | `revalidatePath` in `src/app/api/revalidate/route.ts:35` |
 | Metadaten je Artikel inkl. Open Graph | `generateMetadata` ebenda, Zeile 19–40 |
+| Metadaten der Startseite aus dem CMS | `generateMetadata` in `src/app/page.tsx:17` — `seo_title` und `seo_description` der Story `home` |
 | Draft Mode | `src/app/preview/layout.tsx:13` |
 | Routing mit Catch-all und optionalem Catch-all | `src/app/[...slug]/` und `src/app/preview/[[...slug]]/` |
 | Statische Route neben dem Catch-all | `src/app/journal/page.tsx:7` — eigene Uebersichtsseite, Begruendung `DECISIONS.md` Punkt 10 |

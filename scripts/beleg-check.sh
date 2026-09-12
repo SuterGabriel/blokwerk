@@ -109,6 +109,7 @@ src/app/artikel/[slug]/page.tsx|77|priority
 src/app/artikel/[slug]/page.tsx|78|sizes=
 src/components/ui/ArticleGrid.tsx|20|sm:grid-cols-2
 src/app/journal/page.tsx|7|revalidate = 3600
+src/app/page.tsx|17|generateMetadata
 src/app/api/revalidate/route.ts|35|revalidatePath
 src/app/preview/layout.tsx|13|draftMode
 src/lib/storyblok/components.ts|13|export const components
