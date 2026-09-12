@@ -44,6 +44,10 @@ React Native.
 Anmerkung zur Ehrlichkeit: Das ist ein Einarbeitungsprojekt, keine Kundenarbeit.
 Belegt ist damit die Beherrschung der Konzepte, nicht eine Projekthistorie.
 
+Seit dem 12.09.2026 läuft der Build nicht mehr nur gegen Fixtures, sondern
+gegen einen echten Storyblok-Space: sechzehn Routen, alle Slugs über die
+Content Delivery API geholt.
+
 ### 2. „Erfahrung mit Storyblok oder vergleichbaren Headless-CMS-Plattformen."
 
 **Status: belegt.** Die Anforderung sagt „oder", nicht „und" — Storyblok ist
@@ -168,15 +172,12 @@ würde — dort liegt die einzige nennenswerte Logik.
 Diese Schritte brauchen Zugänge, die nur Gabriel hat. Der Weg dafür steht in
 [EINRICHTUNG.md](./EINRICHTUNG.md):
 
-1. **Storyblok-Space anlegen**, Region EU. Die Komponenten liegen als
-   `storyblok/components.json` für die Storyblok-CLI bereit, die Inhalte als
-   `scripts/storyblok-seed.mjs`; der Weg steht in `SCHEMA.md`. Beides ist gegen
-   einen echten Space ungetestet. Dazu die drei Seiten
-   `arbeiten`, `studio` und `kontakt` — der Header verlinkt sie, und ohne Story
-   liefert der Catch-all dort ein 404. `/journal` braucht das nicht, die Seite
-   ist eine eigene Route (`DECISIONS.md` Punkt 10).
-2. **Beide Token** in `.env.local` eintragen, `npm run dev` gegen echte Inhalte
-   prüfen.
+1. ~~**Storyblok-Space anlegen**~~ — erledigt am 12.09.2026: Region EU, sechs
+   Komponenten über die CLI, vier Seiten und fünf Artikel. Die drei Seiten
+   `arbeiten`, `studio` und `kontakt` liegen darin, der Header verlinkt sie
+   nicht mehr ins 404.
+2. ~~**Beide Token** in `.env.local`~~ — erledigt. `npm run build` gegen die
+   echte API liefert alle sechzehn Routen, ohne Fixture-Hinweis.
 3. **Auf Vercel deployen.** Solange das nicht steht, verspricht `README.md` eine
    Live-URL, die ins Leere führt — das wäre bei einer Bewerbung der teuerste
    einzelne Fehler.
