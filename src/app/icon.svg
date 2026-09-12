@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Blokwerk">
+  <!--
+    Drei gestapelte Bausteine, der mittlere versetzt — das Inhaltsmodell als
+    Zeichen. Bewusst nur zwei Farben und keine feinen Linien: Ein Favicon wird
+    bei 16 Pixeln betrachtet, dort ueberlebt nur Flaeche.
+
+    Die Farben sind die Tokens aus globals.css, --color-accent auf --color-paper.
+  -->
+  <rect width="32" height="32" rx="5" fill="#3c5a47" />
+  <rect x="7" y="8" width="18" height="4.5" rx="1" fill="#fbfaf6" />
+  <rect x="11" y="14" width="14" height="4.5" rx="1" fill="#fbfaf6" opacity="0.72" />
+  <rect x="7" y="20" width="18" height="4.5" rx="1" fill="#fbfaf6" />
+</svg>
