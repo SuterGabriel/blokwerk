@@ -13,7 +13,11 @@
 
 type Blok = Record<string, unknown>;
 
-/** Storyblok liefert Datumsfelder als "YYYY-MM-DD HH:mm". */
+/**
+ * Storyblok liefert Datumsfelder als "YYYY-MM-DD HH:mm" — und Zahlenfelder als
+ * Zeichenkette, auch wenn im Schema "number" steht. Die Fixtures bilden das
+ * nach, sonst pruefen sie den Adapter gegen ein Format, das es nicht gibt.
+ */
 function artikel(
   slug: string,
   felder: {
@@ -23,7 +27,7 @@ function artikel(
     author: string;
     author_bio?: string;
     topic?: string;
-    reading_minutes: number;
+    reading_minutes: string;
     body: Blok;
   },
 ) {
@@ -67,7 +71,7 @@ export const ARTIKEL = [
     author_bio:
       "Marlene Roth gestaltet bei Blokwerk Oberflächen und kümmert sich um alles, was mehr als einmal vorkommt.",
     topic: "Gestaltung",
-    reading_minutes: 6,
+    reading_minutes: "6",
     body: {
       type: "doc",
       content: [
@@ -101,7 +105,7 @@ export const ARTIKEL = [
     author_bio:
       "Tobias Frei arbeitet bei Blokwerk an Inhaltsmodellen und Redaktionsprozessen.",
     topic: "Inhaltsmodellierung",
-    reading_minutes: 9,
+    reading_minutes: "9",
     body: {
       type: "doc",
       content: [
@@ -138,7 +142,7 @@ export const ARTIKEL = [
     author_bio:
       "Anja Wettstein prüft bei Blokwerk Bestandsseiten und begleitet die Korrekturen bis zur Abnahme.",
     topic: "Barrierefreiheit",
-    reading_minutes: 11,
+    reading_minutes: "11",
     body: {
       type: "doc",
       content: [
@@ -167,7 +171,7 @@ export const ARTIKEL = [
     date: "2026-03-09 09:00",
     author: "Marlene Roth",
     topic: "Technik",
-    reading_minutes: 7,
+    reading_minutes: "7",
     body: {
       type: "doc",
       content: [
@@ -188,7 +192,7 @@ export const ARTIKEL = [
     date: "2026-02-10 09:00",
     author: "Tobias Frei",
     topic: "Redaktion",
-    reading_minutes: 5,
+    reading_minutes: "5",
     body: {
       type: "doc",
       content: [

@@ -1,125 +1,261 @@
-{
-  "components": [
-    {
-      "name": "page",
-      "display_name": "Seite",
-      "is_root": true,
-      "is_nestable": false,
-      "schema": {
-        "title": { "type": "text", "pos": 0, "display_name": "Titel" },
-        "body": {
-          "type": "bloks",
-          "pos": 1,
-          "display_name": "Inhalt",
-          "restrict_components": true,
-          "component_whitelist": ["hero", "text_image", "teaser_grid", "quote"],
-          "description": "Nur diese vier Bausteine. Die Einschraenkung ist Absicht, sie verhindert Block-Suppe."
-        },
-        "seo_title": { "type": "text", "pos": 2, "display_name": "SEO-Titel" },
-        "seo_description": { "type": "textarea", "pos": 3, "display_name": "SEO-Beschreibung" }
-      }
-    },
-    {
-      "name": "article",
-      "display_name": "Artikel",
-      "is_root": true,
-      "is_nestable": false,
-      "schema": {
-        "title": { "type": "text", "pos": 0, "display_name": "Titel", "required": true },
-        "teaser": {
-          "type": "textarea",
-          "pos": 1,
-          "display_name": "Teaser",
-          "description": "Zwei bis drei Zeilen. Erscheint in der Artikelkarte und als Meta-Description."
-        },
-        "image": { "type": "asset", "pos": 2, "display_name": "Bild", "filetypes": ["images"] },
-        "image_caption": { "type": "text", "pos": 3, "display_name": "Bildlegende" },
-        "date": { "type": "datetime", "pos": 4, "display_name": "Datum", "disable_time": true },
-        "author": { "type": "text", "pos": 5, "display_name": "Autor" },
-        "author_bio": { "type": "textarea", "pos": 6, "display_name": "Kurzbiografie" },
-        "topic": {
-          "type": "text",
-          "pos": 7,
-          "display_name": "Thema",
-          "description": "Optional, erscheint in der Metazeile."
-        },
-        "reading_minutes": { "type": "number", "pos": 8, "display_name": "Lesezeit in Minuten" },
-        "body": { "type": "richtext", "pos": 9, "display_name": "Text" }
-      }
-    },
-    {
-      "name": "hero",
-      "display_name": "Hero",
-      "is_root": false,
-      "is_nestable": true,
-      "schema": {
-        "eyebrow": { "type": "text", "pos": 0, "display_name": "Ueberzeile" },
-        "headline": { "type": "text", "pos": 1, "display_name": "Schlagzeile", "required": true },
-        "intro": { "type": "textarea", "pos": 2, "display_name": "Einleitung" },
-        "primary_label": { "type": "text", "pos": 3, "display_name": "Button, Beschriftung" },
-        "primary_link": { "type": "multilink", "pos": 4, "display_name": "Button, Ziel" },
-        "secondary_label": { "type": "text", "pos": 5, "display_name": "Zweiter Button, Beschriftung" },
-        "secondary_link": { "type": "multilink", "pos": 6, "display_name": "Zweiter Button, Ziel" },
-        "image": { "type": "asset", "pos": 7, "display_name": "Bild", "filetypes": ["images"] }
-      }
-    },
-    {
-      "name": "text_image",
-      "display_name": "Text mit Bild",
-      "is_root": false,
-      "is_nestable": true,
-      "schema": {
-        "eyebrow": { "type": "text", "pos": 0, "display_name": "Ueberzeile" },
-        "headline": { "type": "text", "pos": 1, "display_name": "Titel" },
-        "text": {
-          "type": "textarea",
-          "pos": 2,
-          "display_name": "Text",
-          "description": "Absaetze durch eine Leerzeile trennen."
-        },
-        "image": { "type": "asset", "pos": 3, "display_name": "Bild", "filetypes": ["images"] },
-        "image_position": {
-          "type": "option",
-          "pos": 4,
-          "display_name": "Bildposition",
-          "default_value": "right",
-          "exclude_empty_option": true,
-          "options": [
-            { "name": "rechts", "value": "right" },
-            { "name": "links", "value": "left" }
-          ]
-        }
-      }
-    },
-    {
-      "name": "teaser_grid",
-      "display_name": "Teaser-Raster",
-      "is_root": false,
-      "is_nestable": true,
-      "schema": {
-        "headline": { "type": "text", "pos": 0, "display_name": "Titel" },
-        "articles": {
-          "type": "options",
-          "pos": 1,
-          "display_name": "Artikel",
-          "source": "internal_stories",
-          "filter_content_type": ["article"],
-          "description": "Referenz, keine Kopie. Aendert sich der Artikel, aendert sich der Teaser mit."
-        },
-        "more_label": { "type": "text", "pos": 2, "display_name": "Weiterfuehrender Link, Beschriftung" },
-        "more_link": { "type": "multilink", "pos": 3, "display_name": "Weiterfuehrender Link, Ziel" }
-      }
-    },
-    {
-      "name": "quote",
-      "display_name": "Zitat",
-      "is_root": false,
-      "is_nestable": true,
-      "schema": {
-        "text": { "type": "textarea", "pos": 0, "display_name": "Zitat", "required": true },
-        "author": { "type": "text", "pos": 1, "display_name": "Person" },
-        "role": { "type": "text", "pos": 2, "display_name": "Rolle" }
+[
+  {
+    "name": "page",
+    "display_name": "Seite",
+    "is_root": true,
+    "is_nestable": false,
+    "schema": {
+      "title": {
+        "type": "text",
+        "pos": 0,
+        "display_name": "Titel"
+      },
+      "body": {
+        "type": "bloks",
+        "pos": 1,
+        "display_name": "Inhalt",
+        "restrict_components": true,
+        "component_whitelist": [
+          "hero",
+          "text_image",
+          "teaser_grid",
+          "quote"
+        ],
+        "description": "Nur diese vier Bausteine. Die Einschraenkung ist Absicht, sie verhindert Block-Suppe."
+      },
+      "seo_title": {
+        "type": "text",
+        "pos": 2,
+        "display_name": "SEO-Titel"
+      },
+      "seo_description": {
+        "type": "textarea",
+        "pos": 3,
+        "display_name": "SEO-Beschreibung"
       }
     }
-  ]
-}
+  },
+  {
+    "name": "article",
+    "display_name": "Artikel",
+    "is_root": true,
+    "is_nestable": false,
+    "schema": {
+      "title": {
+        "type": "text",
+        "pos": 0,
+        "display_name": "Titel",
+        "required": true
+      },
+      "teaser": {
+        "type": "textarea",
+        "pos": 1,
+        "display_name": "Teaser",
+        "description": "Zwei bis drei Zeilen. Erscheint in der Artikelkarte und als Meta-Description."
+      },
+      "image": {
+        "type": "asset",
+        "pos": 2,
+        "display_name": "Bild",
+        "filetypes": [
+          "images"
+        ]
+      },
+      "image_caption": {
+        "type": "text",
+        "pos": 3,
+        "display_name": "Bildlegende"
+      },
+      "date": {
+        "type": "datetime",
+        "pos": 4,
+        "display_name": "Datum",
+        "disable_time": true
+      },
+      "author": {
+        "type": "text",
+        "pos": 5,
+        "display_name": "Autor"
+      },
+      "author_bio": {
+        "type": "textarea",
+        "pos": 6,
+        "display_name": "Kurzbiografie"
+      },
+      "topic": {
+        "type": "text",
+        "pos": 7,
+        "display_name": "Thema",
+        "description": "Optional, erscheint in der Metazeile."
+      },
+      "reading_minutes": {
+        "type": "number",
+        "pos": 8,
+        "display_name": "Lesezeit in Minuten"
+      },
+      "body": {
+        "type": "richtext",
+        "pos": 9,
+        "display_name": "Text"
+      }
+    }
+  },
+  {
+    "name": "hero",
+    "display_name": "Hero",
+    "is_root": false,
+    "is_nestable": true,
+    "schema": {
+      "eyebrow": {
+        "type": "text",
+        "pos": 0,
+        "display_name": "Ueberzeile"
+      },
+      "headline": {
+        "type": "text",
+        "pos": 1,
+        "display_name": "Schlagzeile",
+        "required": true
+      },
+      "intro": {
+        "type": "textarea",
+        "pos": 2,
+        "display_name": "Einleitung"
+      },
+      "primary_label": {
+        "type": "text",
+        "pos": 3,
+        "display_name": "Button, Beschriftung"
+      },
+      "primary_link": {
+        "type": "multilink",
+        "pos": 4,
+        "display_name": "Button, Ziel"
+      },
+      "secondary_label": {
+        "type": "text",
+        "pos": 5,
+        "display_name": "Zweiter Button, Beschriftung"
+      },
+      "secondary_link": {
+        "type": "multilink",
+        "pos": 6,
+        "display_name": "Zweiter Button, Ziel"
+      },
+      "image": {
+        "type": "asset",
+        "pos": 7,
+        "display_name": "Bild",
+        "filetypes": [
+          "images"
+        ]
+      }
+    }
+  },
+  {
+    "name": "text_image",
+    "display_name": "Text mit Bild",
+    "is_root": false,
+    "is_nestable": true,
+    "schema": {
+      "eyebrow": {
+        "type": "text",
+        "pos": 0,
+        "display_name": "Ueberzeile"
+      },
+      "headline": {
+        "type": "text",
+        "pos": 1,
+        "display_name": "Titel"
+      },
+      "text": {
+        "type": "textarea",
+        "pos": 2,
+        "display_name": "Text",
+        "description": "Absaetze durch eine Leerzeile trennen."
+      },
+      "image": {
+        "type": "asset",
+        "pos": 3,
+        "display_name": "Bild",
+        "filetypes": [
+          "images"
+        ]
+      },
+      "image_position": {
+        "type": "option",
+        "pos": 4,
+        "display_name": "Bildposition",
+        "default_value": "right",
+        "exclude_empty_option": true,
+        "options": [
+          {
+            "name": "rechts",
+            "value": "right"
+          },
+          {
+            "name": "links",
+            "value": "left"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "teaser_grid",
+    "display_name": "Teaser-Raster",
+    "is_root": false,
+    "is_nestable": true,
+    "schema": {
+      "headline": {
+        "type": "text",
+        "pos": 0,
+        "display_name": "Titel"
+      },
+      "articles": {
+        "type": "options",
+        "pos": 1,
+        "display_name": "Artikel",
+        "source": "internal_stories",
+        "filter_content_type": [
+          "article"
+        ],
+        "description": "Referenz, keine Kopie. Aendert sich der Artikel, aendert sich der Teaser mit."
+      },
+      "more_label": {
+        "type": "text",
+        "pos": 2,
+        "display_name": "Weiterfuehrender Link, Beschriftung"
+      },
+      "more_link": {
+        "type": "multilink",
+        "pos": 3,
+        "display_name": "Weiterfuehrender Link, Ziel"
+      }
+    }
+  },
+  {
+    "name": "quote",
+    "display_name": "Zitat",
+    "is_root": false,
+    "is_nestable": true,
+    "schema": {
+      "text": {
+        "type": "textarea",
+        "pos": 0,
+        "display_name": "Zitat",
+        "required": true
+      },
+      "author": {
+        "type": "text",
+        "pos": 1,
+        "display_name": "Person"
+      },
+      "role": {
+        "type": "text",
+        "pos": 2,
+        "display_name": "Rolle"
+      }
+    }
+  }
+]

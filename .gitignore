@@ -8,3 +8,7 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# Arbeitsverzeichnis der Storyblok-CLI: Logs, Reports und heruntergeladene
+# Schemata. Die gepflegte Fassung liegt in storyblok/components.json.
+.storyblok/
