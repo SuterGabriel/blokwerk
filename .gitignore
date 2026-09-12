@@ -12,3 +12,7 @@ next-env.d.ts
 # Arbeitsverzeichnis der Storyblok-CLI: Logs, Reports und heruntergeladene
 # Schemata. Die gepflegte Fassung liegt in storyblok/components.json.
 .storyblok/
+
+# Erzeugte Bilder. Sie leben nach dem Upload im CMS, nicht im Repo —
+# das Skript ist die Quelle, nicht die PNG-Datei.
+build/
