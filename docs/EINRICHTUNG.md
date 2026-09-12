@@ -31,69 +31,80 @@ siebenstellige Zahl. Notieren, sie wird zweimal gebraucht.
 ## 2. Komponenten anlegen
 
 Die sechs Komponenten aus [SCHEMA.md](../SCHEMA.md) liegen als
-[storyblok/components.json](../storyblok/components.json) bereit.
+[storyblok/components.json](../storyblok/components.json) bereit, im Format, das
+die CLI liest: ein blankes Array.
 
 ```bash
 npx storyblok login
-npx storyblok push-components storyblok/components.json --space <space-id>
+node scripts/komponenten-bereitstellen.mjs <space-id>
+npx storyblok components push --space <space-id>
 ```
 
-Heisst die CLI-Version das anders — neuere Fassungen haben die Befehle
-umgruppiert —, ist es:
+Der mittlere Schritt kopiert die Datei dorthin, wo die CLI sie sucht:
+`.storyblok/components/<space-id>/components.json`. Die v4-CLI nimmt keinen
+Dateipfad entgegen — `--from` ist eine Space-ID, kein Verzeichnis. Dieses
+Verzeichnis ist ihr Arbeitsordner und steht in `.gitignore`; gepflegt wird
+weiterhin die Fassung im Repo.
 
-```bash
-npx storyblok components push --space <space-id> --from storyblok/components.json
-```
+*Geprüft:* Unter *Block Library* stehen die sechs Komponenten. Öffne `page` und
+sieh nach, dass `body` unter *Allowed components* nur `hero`, `text_image`,
+`teaser_grid` und `quote` zulässt — und dass `teaser_grid.articles` auf den
+Content-Type `article` gefiltert ist. Diese beiden Einschränkungen sind das, was
+das Modell von einem Formular unterscheidet.
 
-Notfalls tippst du die sechs Komponenten nach [SCHEMA.md](../SCHEMA.md) von
-Hand ab. Das dauert zwanzig Minuten und ist der einzige Schritt, der sich
-wirklich klicken lässt.
-
-*Geprüft:* Unter *Block Library* stehen sechs Komponenten. Öffne `page` und
-sieh nach, dass das Feld `body` unter *Allowed components* nur `hero`,
-`text_image`, `teaser_grid` und `quote` zulässt — und dass `teaser_grid.articles`
-auf den Content-Type `article` gefiltert ist. Diese beiden Einschränkungen sind
-das, was das Modell von einem Formular unterscheidet.
+Ein neuer Space bringt vier Komponenten des Starter-Templates mit: `feature`,
+`grid`, `teaser` und ein eigenes `page`. Unser Push überschreibt `page`; die
+anderen drei löschst du in der *Block Library*. Sie gehören nicht zum Modell,
+und wer sie einsetzt, bekommt im Frontend den Platzhalter für unbekannte Bloks.
 
 ---
 
 ## 3. Inhalte anlegen
 
-Der **Management-Token** steht unter *My Account → Personal access tokens*.
-Das ist ein anderer als die beiden Delivery-Token aus Schritt 4: Er darf
-schreiben. Er gehört nicht ins Repo, nicht in `.env.local` und nicht in ein
-Deployment — nur in die eine Befehlszeile hier.
+Die neun Stories stehen in `src/lib/storyblok/fixtures/inhalte.ts` — dieselben,
+gegen die die CI baut. Es gibt zwei Wege, sie in den Space zu bekommen.
 
-Erst ansehen, was passieren würde:
+**Über die CLI**, empfohlen, weil `storyblok login` ohnehin gelaufen ist und
+kein zweites Geheimnis nötig wird:
 
 ```bash
-node scripts/storyblok-seed.mjs --dry-run
+node scripts/stories-bereitstellen.mjs <space-id> --artikel
+npx storyblok stories push --space <space-id> --publish
+npx storyblok stories pull --space <space-id>
+node scripts/stories-bereitstellen.mjs <space-id> --seiten
+npx storyblok stories push --space <space-id> --publish
 ```
 
-Dann echt (PowerShell-Fassung, weil du unter Windows arbeitest):
+Fünf Befehle statt einem, und der Grund steht im Inhaltsmodell: Das Teaser-Grid
+referenziert Artikel über ihre UUID. Die vergibt Storyblok beim Anlegen, also
+müssen die Artikel existieren, bevor die Seiten geschrieben werden. Der
+`pull` dazwischen holt die vergebenen UUIDs.
+
+**Über die Management API**, falls du lieber einen Personal Access Token
+benutzt (*My Account → Personal access tokens*):
 
 ```powershell
 $env:STORYBLOK_SPACE_ID="<space-id>"
-$env:STORYBLOK_MANAGEMENT_TOKEN="<personal-access-token>"
+$env:STORYBLOK_MANAGEMENT_TOKEN="<token>"
 node scripts/storyblok-seed.mjs
 ```
 
-In Git Bash oder auf einem Mac:
-
-```bash
-STORYBLOK_SPACE_ID=<space-id> STORYBLOK_MANAGEMENT_TOKEN=<token> \
-  node scripts/storyblok-seed.mjs
-```
-
-Das Skript legt einen Ordner `artikel/`, fünf Artikel und vier Seiten an, in
-dieser Reihenfolge — das Teaser-Grid referenziert Artikel über ihre UUID, und
-die gibt es erst nach dem Anlegen. Ein zweiter Lauf aktualisiert, statt zu
-verdoppeln.
+Der Trockenlauf `node scripts/storyblok-seed.mjs --dry-run` zeigt vorher, was
+passieren würde.
 
 *Geprüft:* Im *Content*-Bereich stehen `home`, `arbeiten`, `studio`, `kontakt`
-und ein Ordner `artikel` mit fünf Einträgen. Öffne `home` und sieh im
-Teaser-Grid nach, dass dort drei Artikel referenziert sind und nicht drei leere
-Felder.
+und ein Ordner `artikel` mit fünf Einträgen, alle *Published*. Öffne `home` und
+sieh im Teaser-Grid nach, dass dort drei Artikel referenziert sind und nicht
+drei leere Felder.
+
+**Was beim ersten Lauf schiefgehen kann**, aus Erfahrung:
+
+Die CLI legt neue Stories auf der obersten Ebene an, auch wenn die Datei einen
+Pfad nennt. Liegen die Artikel neben statt in `artikel/`, läuft `/artikel/<slug>`
+ins Leere — das Skript setzt deshalb `parent_id`, aber erst, wenn der Ordner
+existiert. Bleiben aus einem Fehlversuch leere Stories auf der obersten Ebene
+liegen, löschst du sie im *Content*-Bereich; sie sind unveröffentlicht und
+öffentlich unsichtbar, stören aber im Editor.
 
 ---
 
@@ -128,9 +139,14 @@ Projekts: Was du siehst, kommt jetzt über die API. Weiter prüfen:
 
 - `/journal` listet fünf Artikel, absteigend nach Datum
 - ein Artikel öffnet sich, zeigt Rich Text, Zitat und Aufzählung
-- `/studio` zeigt den ruhigen Platzhalter für `interactive_timeline` — der Blok
-  existiert im CMS, ist aber absichtlich nicht registriert. Die Seite kippt
-  nicht, sie sagt es.
+- der Hero zeigt zwei Schaltflächen, das Teaser-Grid drei Karten mit Datum,
+  Autor und Lesezeit
+
+Den Platzhalter für unbekannte Bloks siehst du hier **nicht**: Der Blok
+`interactive_timeline` aus den Fixtures wird beim Hochladen ausgelassen, weil
+ihn das Modell nicht kennt und `page.body` ihn nicht zuliesse. Die Probe dafür
+steht in [SCHEMA.md](../SCHEMA.md) und ist eine Sache von zwei Minuten: einen
+Blok anlegen, einsetzen, nicht registrieren.
 
 ---
 
